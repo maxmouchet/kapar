@@ -1096,7 +1096,7 @@ class MyPathLoaderHandler : public PathLoaderHandler {
     ExplicitIface *ihops[MAXHOPS];
 public:
     MyPathLoaderHandler() :
-	PathLoaderHandler(out_log, debugpath != sink), cached_hops(0),
+	PathLoaderHandler(out_log, &debugpath != &sink), cached_hops(0),
 	n_cached_hops(0), n_repeated_hops(0), n_stored_hops(0) {};
 
     bool isBadHop(const ip4addr_t *hops, int n_hops, int i)
@@ -1148,7 +1148,7 @@ public:
 
     int processHops(const ip4addr_t *hops, int n_hops, ip4addr_t src, ip4addr_t dst, void *strace)
     {
-	if (debugpath != sink) {
+	if (&debugpath != &sink) {
 	    debugpath << "### " << pathLoader.n_good_traces << " ihops:";
 	    for (int j = 0; j < n_hops; ++j)
 		debugpath << " " << *ihops[j];
@@ -1645,7 +1645,7 @@ static void findSubnets()
     rankedSubnets = new SubnetVec(subnets->begin(), subnets->end());
     sort(rankedSubnets->begin(), rankedSubnets->end(), infsubnet_rank());
 
-    if (debugsubnet != sink) {
+    if (&debugsubnet != &sink) {
 	debugsubnet << "# sorted rankedSubnets\n";
 	SubnetVec::const_iterator rit;
 	for (rit = rankedSubnets->begin(); rit != rankedSubnets->end(); ++rit) {
