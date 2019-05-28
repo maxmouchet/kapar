@@ -1,0 +1,12 @@
+Makefile
+config.log
+config.status
+
+*.o
+
+kapar/config.h
+kapar/kapar
+
+kapar.aliases
+kapar.links
+kapar.log
