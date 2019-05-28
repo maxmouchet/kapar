@@ -1,0 +1,78 @@
+kapar 0.6 (2018-05-15)
+Written and maintained by Ken Keys, CAIDA
+
+Kapar is an IP alias resolution tool based on topology inference.
+
+For a complete description of the kapar algorithm, see the web page:
+    http://www.caida.org/tools/measurement/kapar/
+the paper:
+    http://www.caida.org/publications/papers/2010/alias_resolution/
+and the source code in this release.
+
+Requirements:
+- POSIX or unix-like operating system
+- a modern C++ compiler
+- the scamper library, if you wish to use kapar with "warts" format traces
+  available at http://www.caida.org/tools/measurement/scamper/
+
+To build kapar, run these commands from the kapar-X.Y directory:
+
+    ./configure --with-scamper=${directory}
+    make
+
+The --with-scamper option may be omitted if you do not wish to to
+use kapar with "warts" traces.
+
+Run "kapar -?" for a complete list of options.  Most behavior options
+are intended for experimental use, and should be left at their
+default values for normal use.  The only required file option is
+-P to specify one or more files containing traceroute paths.  Other
+file options may be useful for normal use, but are not required.
+
+Note: anonymous (non-responding) interfaces are assigned fake addresses from
+224.0.0.0/4 to uniquely identify them.  (Earlier versions of kapar used fake
+addresses from 0.0.0.0/8.)
+
+==================================================================
+Version history
+
+Version 0.6 (2018-05-15)
+* utils/sets-to-pairs.cc: increased buffer to 1MB to support large input lines
+* fixed false negative in seen_as_transit for a hop that was followed by
+  nothing but bad hops
+* added option to output interface file containing iface_address, nodeid,
+  linkid, seen_as_transit, and seen_as_destination.
+
+Version 0.5 (2015-06-08)
+* Fixed fatal error during alias inference stage when built with g++ 4.8 (and
+  probably others)
+
+Version 0.4 (2014-12-04)
+* Fixed build error on platforms with pthreads but not libz.
+
+Version 0.3 (2013-09-13)
+* anonymous (non-responding) interfaces are assigned fake addresses from
+  224.0.0.0/4 (instead of 0.0.0.0/8) to uniquely identify them, allowing
+  268,435,456 anonymous interfaces (instead of 16,777,216).
+* fixed bug in handling error while reading gzipped file
+* fixed: with -d1, anonymous iface seen at penultimate hop could be assigned to
+  multiple nodes 
+
+Version 0.2 (2012-07-17)
+* replaced ext/hash_set with portable unordered_set
+* fixed implementation of keeping destinations:
+    - replaced -d option with -d1 and -d0 options
+    - keeping destinations is now the default for analysis mode
+    - ignores destination links in alias inference
+    - no longer ignores destinations when creating badSubnets
+    - no longer ignores duplicate anonymous iface in A,*,B when B is a
+      destination
+* fixed: could sometimes create redundant implicit links between nodes that
+  were already linked
+* Fixed reverse anonymous dup bug: anonymous duplication detection also
+  applied to REVERSED sequences, e.g.  Sequences (A,*,*,B) and (B,*,*,A) were
+  incorrectly labeled (A,anon1,anon2,B) and (B,anon2,anon1,A).
+* added -z option (min subnet len)
+
+Version 0.1 (2011-10-03)
+* first release

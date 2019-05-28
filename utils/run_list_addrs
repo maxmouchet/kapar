@@ -1,0 +1,7 @@
+#!/bin/sh
+datadir=/san5/topology/ark/data/team-probing/list-7.allpref24
+for team in team-1 team-2; do
+    for cycle in $datadir/$team/daily/20??/cycle-*; do
+	./list_addrs -o /scratch1/$USER/$team $cycle || exit $?
+    done
+done

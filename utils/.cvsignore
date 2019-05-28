@@ -1,0 +1,14 @@
+Makefile
+autom4te.cache
+config.log
+config.status
+configure
+*.png
+*.dat
+list_addrs
+addr_period
+link_period
+tab_addrs
+tab_links
+iff-chain
+iff-analyze

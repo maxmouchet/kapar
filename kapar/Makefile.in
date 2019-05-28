@@ -1,0 +1,57 @@
+## 
+## Copyright (C) 2011-2018 The Regents of the University of California.
+## 
+## This program is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation; either version 2 of the License, or
+## (at your option) any later version.
+## 
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+## 
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+## 
+
+# @configure_input@
+# $Id: Makefile.in,v 1.19 2015/09/16 19:51:30 kkeys Exp $
+
+CXX=@CXX@
+CPPFLAGS = @CPPFLAGS@ @SCAMPER_CPPFLAGS@
+CXXFLAGS = @CXXFLAGS@ @PTHREAD_CFLAGS@
+LDFLAGS = @LDFLAGS@ @SCAMPER_LDFLAGS@
+LIBS = @SCAMPER_LIBS@ @PTHREAD_LIBS@ @LIBS@
+
+YES_DEV_TARGETS=alias-cmp warts-to-paths log-cmp
+
+all: kapar $(@DEV@_DEV_TARGETS)
+
+clean:
+	rm -f *.o *.core
+
+.cc.o:
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) -o $@ $*.cc
+
+kapar.o: kapar.cc ../lib/ivector.h ../lib/infile.h ../lib/ip4addr.h ../lib/Pool.h ../lib/MemoryInfo.h ../lib/NetPrefix.h ../lib/PathLoader.h ../lib/AddrPair.h ../lib/unordered_set.h
+
+kapar: kapar.o ../lib/infile.o ../lib/PathLoader.o ../lib/MemoryInfo.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ kapar.o ../lib/infile.o ../lib/PathLoader.o ../lib/MemoryInfo.o $(LDFLAGS) $(LIBS)
+
+warts-to-paths.o: warts-to-paths.cc ../lib/infile.h ../lib/ip4addr.h ../lib/PathLoader.h
+
+warts-to-paths: warts-to-paths.o ../lib/infile.o ../lib/PathLoader.o ../lib/MemoryInfo.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ warts-to-paths.o ../lib/infile.o ../lib/PathLoader.o ../lib/MemoryInfo.o $(LDFLAGS) $(LIBS)
+
+alias-cmp.o: alias-cmp.cc ../lib/infile.h ../lib/ip4addr.h ../lib/PathLoader.h ../lib/AddrPair.h
+
+alias-cmp: alias-cmp.o ../lib/infile.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ alias-cmp.o ../lib/infile.o $(LDFLAGS) $(LIBS)
+
+log-cmp.o: log-cmp.cc ../lib/infile.h ../lib/ip4addr.h ../lib/PathLoader.h ../lib/AddrPair.h
+
+log-cmp: log-cmp.o ../lib/infile.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ log-cmp.o ../lib/infile.o $(LDFLAGS) $(LIBS)
+
