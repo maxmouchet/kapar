@@ -8,5 +8,9 @@ kapar/config.h
 kapar/kapar
 
 kapar.aliases
+kapar.ifaces
 kapar.links
 kapar.log
+kapar.subnets
+
+bogon-bn-agg.txt
